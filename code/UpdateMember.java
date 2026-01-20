@@ -13,7 +13,7 @@ public class UpdateMember
         PreparedStatement pstat = null;
         // test data to update
         String name = "Mark";
-        String email = "mark@email.com";
+        String email = "mark@gmail.com";
         int i =0;
         try 
             {

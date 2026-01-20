@@ -13,7 +13,7 @@ public class InsertMember
         PreparedStatement pstat = null;
         // test data to insert
         String name = "Mark";
-        String email = "mark@example.com";
+        String email = "mark@gmail.com";
         String phoneNumber = "1234567890";
         String dateOfBirth = "1990-01-01";
         int i =0;

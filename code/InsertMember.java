@@ -1,7 +1,7 @@
-import java . sql .Connection;
-import java . sql .DriverManager;
-import java . sql .PreparedStatement;
-import java . sql .SQLException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class InsertMember 
 {
@@ -9,8 +9,9 @@ public class InsertMember
     {
         // database URL
         final String DATABASE_URL = "jdbc:sqlite:gym.db";
-        Connection connection = null ;
-        PreparedStatement pstat = null ;
+        Connection connection = null;
+        PreparedStatement pstat = null;
+        // test data to insert
         String name = "Mark";
         String email = "mark@example.com";
         String phoneNumber = "1234567890";
@@ -32,18 +33,18 @@ public class InsertMember
             }
             catch(SQLException sqlException)
                 {
-                sqlException . printStackTrace () ;
+                sqlException . printStackTrace ();
                 }
             finally 
                 {
                 try 
                     {
-                        pstat . close () ;
-                        connection. close () ;
+                        pstat . close ();
+                        connection. close ();
                     }
                 catch (Exception exception)
                     {
-                    exception . printStackTrace () ;
+                        exception . printStackTrace ();
                     }
                 }
     } // end main

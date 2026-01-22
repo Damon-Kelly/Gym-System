@@ -20,7 +20,7 @@ public class UpdateMember
                 // establish connection to database
                 connection = DriverManager.getConnection(DATABASE_URL, "root", "password");
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("UPDATE Members SET Email = ? WHERE Name = ?");
+                pstat = connection.prepareStatement("UPDATE Member SET Email = ? WHERE Name = ?");
                 pstat . setString (1, email);
                 pstat . setString (2, name);
                 // insert data into table

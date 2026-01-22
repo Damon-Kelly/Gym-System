@@ -19,7 +19,7 @@ public class QueryMember
                 // establish connection to database
                 connection = DriverManager.getConnection(DATABASE_URL, "root", "password");
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("SELECT MemberID, Name, Email, PhoneNumber, DateOfBirth FROM Members");
+                pstat = connection.prepareStatement("SELECT MemberID, Name, Email, PhoneNumber, DateOfBirth FROM Member");
                 // insert data into table
                 resultSet = pstat .executeQuery();
                 

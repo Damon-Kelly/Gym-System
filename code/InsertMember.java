@@ -22,7 +22,7 @@ public class InsertMember
                 // establish connection to database
                 connection = DriverManager.getConnection(DATABASE_URL, "root", "password");
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("INSERT INTO Members (Name, Email, PhoneNumber, dateOfBirth) VALUES (?,?,?,?)");
+                pstat = connection.prepareStatement("INSERT INTO Member (Name, Email, PhoneNumber, dateOfBirth) VALUES (?,?,?,?)");
                 pstat . setString (1, name);
                 pstat . setString (2, email);
                 pstat . setString (3, phoneNumber);

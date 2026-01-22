@@ -19,7 +19,7 @@ public class DeleteMember
                 // establish connection to database
                 connection = DriverManager.getConnection(DATABASE_URL, "root", "password");
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("DELETE FROM Members WHERE MemberID = ?");
+                pstat = connection.prepareStatement("DELETE FROM Member WHERE MemberID = ?");
                 pstat . setInt (1, memberID);
                 // insert data into table
                 i = pstat .executeUpdate();

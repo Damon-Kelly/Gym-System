@@ -29,16 +29,17 @@ public class QueryMember
                 for (int i = 1; i <= numberOfColumns; i++)
                     {
                         System.out.print (metaData.getColumnName( i ) + "\t" );
-                        System.out.println ();
-                        while ( resultSet.next () )
-                            {
-                                for ( int j = 1; j <= numberOfColumns; j++ )
-                                    {
-                                        System.out. print(resultSet.getObject( j ) + "\t\t");
-                                        System.out. println();
-                                    }
-                            }
                     }
+                System.out.println ();
+                while (resultSet.next())
+                    {
+                        for ( int j = 1; j <= numberOfColumns; j++ )
+                            {
+                                System.out. print(resultSet.getObject( j ) + "\t\t");
+                            }
+                        System.out. println ( );
+                    }
+                System.out.println();
             }
             catch(SQLException sqlException)
                 {

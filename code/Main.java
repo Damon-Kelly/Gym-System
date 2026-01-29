@@ -24,9 +24,9 @@ public class Main
 				System.out.println();
 				System.out.println("Gym Management System");
 				System.out.println("1. Add Member");
-				System.out.println("2. Update Member");
-				System.out.println("3. Delete Member");
-				System.out.println("4. View Members");
+				System.out.println("2. View Members");
+				System.out.println("3. Update Member");
+				System.out.println("4. Delete Member");
 				System.out.println("5. Exit");
 				System.out.println();
 				System.out.print("Enter your choice: ");
@@ -65,7 +65,7 @@ public class Main
 						UpdateMember.updateMember(name, email);
 					} 
 
-				else if (choice == 3) 
+				else if (choice == 4) 
 					{
 						System.out.println("Delete Member selected.");
 						System.out.println();
@@ -79,7 +79,7 @@ public class Main
 						System.out.println("Exiting the program. Bye bye bye bye bye!");
 						running = false;
 					} 
-					
+
 				else 
 					{
 						System.out.println("Invalid choice. Please try again.");

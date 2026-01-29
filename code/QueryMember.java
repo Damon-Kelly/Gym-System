@@ -1,5 +1,4 @@
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -9,15 +8,13 @@ public class QueryMember
 {
     public static void main(String [] args) 
     {
-        // database URL
-        final String DATABASE_URL = "jdbc:sqlite:gym.db";
         Connection connection = null;
         PreparedStatement pstat = null;
         ResultSet resultSet = null;
         try 
             {
                 // establish connection to database
-                connection = DriverManager.getConnection(DATABASE_URL, "root", "password");
+                connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
                 pstat = connection.prepareStatement("SELECT MemberID, Name, Email, PhoneNumber, DateOfBirth FROM Member");
                 // insert data into table

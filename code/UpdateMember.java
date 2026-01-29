@@ -1,5 +1,4 @@
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -7,8 +6,6 @@ public class UpdateMember
 {
     public static void main(String [] args) 
     {
-        // database URL
-        final String DATABASE_URL = "jdbc:sqlite:gym.db";
         Connection connection = null;
         PreparedStatement pstat = null;
         // test data to update
@@ -18,7 +15,7 @@ public class UpdateMember
         try 
             {
                 // establish connection to database
-                connection = DriverManager.getConnection(DATABASE_URL, "root", "password");
+                connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
                 pstat = connection.prepareStatement("UPDATE Member SET Email = ? WHERE Name = ?");
                 pstat . setString (1, email);

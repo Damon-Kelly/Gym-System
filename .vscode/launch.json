@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "GymSystem_9f43ef8b"
+        },
+        {
+            "type": "java",
+            "name": "DeleteMember",
+            "request": "launch",
+            "mainClass": "DeleteMember",
+            "projectName": "GymSystem_9f43ef8b"
+        },
+        {
+            "type": "java",
             "name": "QueryMember",
             "request": "launch",
             "mainClass": "QueryMember",

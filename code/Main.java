@@ -47,7 +47,14 @@ public class Main
 						dateOfBirth = scanner.nextLine();
 						InsertMember.insertMember(name, email, phoneNumber, dateOfBirth);
 					} 
+
 				else if (choice == 2) 
+					{
+						System.out.println("View Members selected.");
+						QueryMember.queryMembers();
+					} 
+
+				else if (choice == 3) 
 					{
 						System.out.println("Update Member selected.");
 						System.out.println();
@@ -57,6 +64,7 @@ public class Main
 						email = scanner.nextLine();
 						UpdateMember.updateMember(name, email);
 					} 
+
 				else if (choice == 3) 
 					{
 						System.out.println("Delete Member selected.");
@@ -65,16 +73,13 @@ public class Main
 						memberID = scanner.nextInt();
 						DeleteMember.deleteMember(memberID);
 					} 
-				else if (choice == 4) 
-					{
-						System.out.println("View Members selected.");
-						QueryMember.queryMembers();
-					} 
+				
 				else if (choice == 5) 
 					{
 						System.out.println("Exiting the program. Bye bye bye bye bye!");
 						running = false;
 					} 
+					
 				else 
 					{
 						System.out.println("Invalid choice. Please try again.");

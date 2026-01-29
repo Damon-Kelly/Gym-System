@@ -23,6 +23,7 @@ public class Main
 				// Display menu
 				System.out.println();
 				System.out.println("Gym Management System");
+				System.out.println("---------------------");
 				System.out.println("1. Add Member");
 				System.out.println("2. View Members");
 				System.out.println("3. Update Member");
@@ -37,13 +38,13 @@ public class Main
 					{
 						System.out.println("Add Member selected.");
 						System.out.println();
-						System.out.println("Enter the name : ");
+						System.out.print("Enter the name : ");
 						name = scanner.nextLine();
-						System.out.println("Enter the email : ");
+						System.out.print("Enter the email : ");
 						email = scanner.nextLine();
-						System.out.println("Enter the phone number : ");
+						System.out.print("Enter the phone number : ");
 						phoneNumber = scanner.nextLine();
-						System.out.println("Enter the date of birth (YYYY-MM-DD) : ");
+						System.out.print("Enter the date of birth (YYYY-MM-DD) : ");
 						dateOfBirth = scanner.nextLine();
 						InsertMember.insertMember(name, email, phoneNumber, dateOfBirth);
 					} 

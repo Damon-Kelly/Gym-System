@@ -23,8 +23,7 @@ public class QueryMember
                 System.out.printf("%-10s %-15s %-25s %-15s %-12s%n",
                 "MemberID", "Name", "Email", "PhoneNumber", "DateOfBirth");
                 System.out.println("--------------------------------------------------------------------------------");
-
-                System.out.println ();
+                
                 while (resultSet.next())
                     {
                         System.out.printf("%-10d %-15s %-25s %-15s %-12s%n",

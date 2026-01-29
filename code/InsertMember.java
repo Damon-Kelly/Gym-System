@@ -4,15 +4,10 @@ import java.sql.SQLException;
 
 public class InsertMember 
 {
-    public static void insertTest() 
+    public static void insertMember(String name, String email, String phoneNumber, String dateOfBirth) 
     {
         Connection connection = null;
         PreparedStatement pstat = null;
-        // test data to insert
-        String name = "Damon";
-        String email = "damon@gmail.com";
-        String phoneNumber = "78910";
-        String dateOfBirth = "2005-08-08";
         int i =0;
         try 
             {

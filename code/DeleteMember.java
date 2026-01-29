@@ -4,12 +4,10 @@ import java.sql.SQLException;
 
 public class DeleteMember 
 {
-    public static void main(String [] args) 
+    public static void deleteMember(int memberID) 
     {
         Connection connection = null;
         PreparedStatement pstat = null;
-        // test data to delete
-        int memberID = 2;
         int i =0;
         try 
             {

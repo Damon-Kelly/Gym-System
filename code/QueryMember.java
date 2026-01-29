@@ -2,11 +2,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 
 public class QueryMember 
 {
-    public static void main(String [] args) 
+    public static void queryMembers() 
     {
         Connection connection = null;
         PreparedStatement pstat = null;
@@ -20,27 +19,26 @@ public class QueryMember
                 // insert data into table
                 resultSet = pstat .executeQuery();
                 
-                ResultSetMetaData metaData = resultSet.getMetaData();
-                int numberOfColumns = metaData.getColumnCount();
                 System.out.println( "Members Table :\n" );
-                for (int i = 1; i <= numberOfColumns; i++)
-                    {
-                        System.out.print (metaData.getColumnName( i ) + "\t" );
-                    }
+                System.out.printf("%-10s %-15s %-25s %-15s %-12s%n",
+                "MemberID", "Name", "Email", "PhoneNumber", "DateOfBirth");
+                System.out.println("--------------------------------------------------------------------------------");
+
                 System.out.println ();
                 while (resultSet.next())
                     {
-                        for ( int j = 1; j <= numberOfColumns; j++ )
-                            {
-                                System.out. print(resultSet.getObject( j ) + "\t\t");
-                            }
-                        System.out. println ( );
+                        System.out.printf("%-10d %-15s %-25s %-15s %-12s%n",
+                        resultSet.getInt("MemberID"),
+                        resultSet.getString("Name"),
+                        resultSet.getString("Email"),
+                        resultSet.getString("PhoneNumber"),
+                        resultSet.getString("DateOfBirth"));
                     }
                 System.out.println();
             }
             catch(SQLException sqlException)
                 {
-                    sqlException . printStackTrace ();
+                    sqlException . printStackTrace();
                 }
             finally 
                 {

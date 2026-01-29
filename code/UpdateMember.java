@@ -4,13 +4,10 @@ import java.sql.SQLException;
 
 public class UpdateMember 
 {
-    public static void main(String [] args) 
+    public static void updateMember(String name, String email) 
     {
         Connection connection = null;
         PreparedStatement pstat = null;
-        // test data to update
-        String name = "Mark";
-        String email = "mark@gmail.com";
         int i =0;
         try 
             {

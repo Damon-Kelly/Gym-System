@@ -9,13 +9,15 @@ public class Trainer
     private int TrainerID;
     public static int nextID = 1;
     private String Name;
+    private String Email;
 
     // constructor
-    public Trainer(String Name)
+    public Trainer(String Name, String Email)
     {
         this.TrainerID = nextID;
         nextID++;
         this.Name = Name;
+        this.Email = Email;
     }
 
     // getters and setters
@@ -28,9 +30,19 @@ public class Trainer
         {
             return Name;
         }
+    
+    public String getEmail() 
+        {
+            return Email;
+        }
 
     public void setName(String name) 
         {
             Name = name;
+        }
+
+    public void setEmail(String email) 
+        {
+            Email = email;
         }
 } // end class

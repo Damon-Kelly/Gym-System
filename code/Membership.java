@@ -12,9 +12,10 @@ public class Membership
     private String StartDate;
     private String EndDate;
     private int IsActive;
+    private int MemberID;
 
     // constructor
-    public Membership(String PlanType, String StartDate, String EndDate, int IsActive)
+    public Membership(String PlanType, String StartDate, String EndDate, int IsActive, int memberID)
     {
         this.MembershipID = nextID;
         nextID++;
@@ -22,6 +23,7 @@ public class Membership
         this.StartDate = StartDate;
         this.EndDate = EndDate;
         this.IsActive = IsActive;
+        this.MemberID = memberID;
     }
 
     // getters and setters
@@ -50,6 +52,11 @@ public class Membership
             return IsActive;
         }
 
+    public int getMemberID() 
+        {
+            return MemberID;
+        }
+
     public void setPlanType(String planType) 
         {
             PlanType = planType;
@@ -68,6 +75,11 @@ public class Membership
     public void setIsActive(int isActive) 
         {
             IsActive = isActive;
+        }
+
+    public void setMemberID(int memberID) 
+        {
+            MemberID = memberID;
         }
 
 } // end class

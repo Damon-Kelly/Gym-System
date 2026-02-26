@@ -1,7 +1,7 @@
 // Student Name : 		Damon Kelly
 // Student Id Number : 	C00307057
-// Date :				29/01/2026
-// Purpose : 			Make a Trainer object with relevant attributes and methods
+// Date :			    26/02/2026
+// Purpose : 		    Trainer class
 
 public class Trainer
 { // begin class 

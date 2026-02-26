@@ -1,16 +1,16 @@
 // Student Name : 		Damon Kelly
 // Student Id Number : 	C00307057
 // Date :			    26/02/2026
-// Purpose : 		    Query the member table and display the details of all members in the database.
+// Purpose : 		    Checks if members have an active membership and displays their details if they do.
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
-public class QueryMember 
+public class QueryMembership 
 {
-    public static void queryMembers() 
+    public static void queryMembership() 
     {
         Connection connection = null;
         PreparedStatement pstat = null;
@@ -20,23 +20,23 @@ public class QueryMember
                 // establish connection to database
                 connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("SELECT MemberID, Name, Email, PhoneNumber, DateOfBirth FROM Member");
+                pstat = connection.prepareStatement("SELECT Member.Name, Member.Email, Membership.PlanType, Membership.IsActive FROM Member INNER JOIN Membership ON Member.MemberID = Membership.MemberID WHERE Membership.IsActive = true");
+                    
                 // insert data into table
                 resultSet = pstat .executeQuery();
                 
-                System.out.println( "Members Table :\n" );
-                System.out.printf("%-10s %-15s %-25s %-15s %-12s%n",
-                "MemberID", "Name", "Email", "PhoneNumber", "DateOfBirth");
-                System.out.println("--------------------------------------------------------------------------------");
+                System.out.println( "Active Memberships :\n" );
+                System.out.printf("%-15s %-25s %-15s %-10s%n",
+                "Name", "Email", "PlanType", "IsActive");
+                System.out.println("---------------------------------------------------------------");
                 
                 while (resultSet.next())
                     {
-                        System.out.printf("%-10d %-15s %-25s %-15s %-12s%n",
-                        resultSet.getInt("MemberID"),
+                        System.out.printf("%-15s %-25s %-15s %-10b%n",
                         resultSet.getString("Name"),
                         resultSet.getString("Email"),
-                        resultSet.getString("PhoneNumber"),
-                        resultSet.getString("DateOfBirth"));
+                        resultSet.getString("PlanType"),
+                        resultSet.getBoolean("IsActive"));
                     }
                 System.out.println();
             }

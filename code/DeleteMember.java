@@ -1,3 +1,8 @@
+// Student Name : 		Damon Kelly
+// Student Id Number : 	C00307057
+// Date :			    26/02/2026
+// Purpose : 		    Deletes a member from the Member table.
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

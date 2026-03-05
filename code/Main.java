@@ -37,6 +37,14 @@ public class Main
 				System.out.println("10. View Trainers");
 				System.out.println("11. Update Trainer");
 				System.out.println("12. Delete Trainer");
+				System.out.println("13. Add Class");
+				System.out.println("14. View Classes");
+				System.out.println("15. Update Class");
+				System.out.println("16. Delete Class");
+				System.out.println("17. Add Booking");
+				System.out.println("18. View Bookings");
+				System.out.println("19. Update Booking");
+				System.out.println("20. Delete Booking");
 				System.out.println();
 				System.out.print("Enter your choice: ");
 				choice = scanner.nextInt();
@@ -178,6 +186,90 @@ public class Main
 						System.out.print("Enter the trainer ID to delete : ");
 						int trainerID = scanner.nextInt();
 						DeleteTrainer.deleteTrainer(trainerID);
+					}
+
+				else if (choice == 13)
+					{
+						System.out.println("Add Class selected.");
+						System.out.println();
+						System.out.print("Enter the title : ");
+						String title = scanner.nextLine();
+						System.out.print("Enter the schedule (dd/mm/yyyy 12:00) : ");
+						String schedule = scanner.nextLine();
+						System.out.print("Enter the capacity");
+						int capacity = scanner.nextInt();
+						InsertClass.insertClass(title, schedule, capacity);
+					}
+
+				else if (choice == 14)
+					{
+						System.out.println("View Classes selected.");
+						QueryClass.queryClasses();
+					}
+
+				else if (choice == 15)
+					{
+						System.out.println("Update Class selected.");
+						System.out.println();
+						System.out.print("Enter the class ID to update : ");
+						int classID = scanner.nextInt();
+						scanner.nextLine(); // Consume newline
+						System.out.print("Enter the new title : ");
+						String title = scanner.nextLine();
+						System.out.print("Enter the new schedule : ");
+						String schedule = scanner.nextLine();
+						System.out.print("Enter the new capacity : ");
+						int capacity = scanner.nextInt();
+						UpdateClass.updateClass(classID, title, schedule, capacity);
+					}
+
+				else if (choice == 16)
+					{
+						System.out.println("Delete Class selected.");
+						System.out.println();
+						System.out.print("Enter the class ID to delete : ");
+						int classID = scanner.nextInt();
+						DeleteClass.deleteClass(classID);
+					}
+
+				else if (choice == 17)
+					{
+						System.out.println("Add Booking selected.");
+						System.out.println();
+						System.out.print("Enter the booking date (dd/mm/yyyy) : ");
+						String bookingDate = scanner.nextLine();
+						System.out.print("Enter the status : ");
+						String status = scanner.nextLine();
+						InsertBooking.insertBooking(bookingDate, status);
+					}
+
+				else if (choice == 18)
+					{
+						System.out.println("View Bookings selected.");
+						QueryBooking.queryBookings();
+					}
+
+				else if (choice == 19)
+					{
+						System.out.println("Update Booking selected.");
+						System.out.println();
+						System.out.print("Enter the booking ID to update : ");
+						int bookingID = scanner.nextInt();
+						scanner.nextLine(); // Consume newline
+						System.out.print("Enter the new booking date (dd/mm/yyyy) : ");
+						String bookingDate = scanner.nextLine();
+						System.out.print("Enter the new status : ");
+						String status = scanner.nextLine();
+						UpdateBooking.updateBooking(bookingID, bookingDate, status);
+					}
+
+				else if (choice == 20)
+					{
+						System.out.println("Delete Booking selected.");
+						System.out.println();
+						System.out.print("Enter the booking ID to delete : ");
+						int bookingID = scanner.nextInt();
+						DeleteBooking.deleteBooking(bookingID);
 					}
 
 				else 

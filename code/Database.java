@@ -15,4 +15,33 @@ public class Database
         conn.createStatement().execute("PRAGMA foreign_keys = ON");
         return conn;
     }
+
+    public static Member authenticateMember(String email, String password) throws SQLException 
+    {
+        Connection conn = getConnection();
+        var stmt = conn.prepareStatement("SELECT * FROM Member WHERE Email = ? AND Password = ?");
+        stmt.setString(1, email);
+        stmt.setString(2, password);
+        var login = stmt.executeQuery();
+        if (!login.next()) 
+            {
+                throw new SQLException("Invalid email or password.");
+            }
+        return new Member(login.getInt("MemberID"), login.getString("Name"), login.getString("Email"), login.getString("PhoneNumber"), login.getString("dateOfBirth"), login.getString("Password"));
+
+    }
+
+    public static Trainer authenticateTrainer(String email, String password) throws SQLException 
+    {
+        Connection conn = getConnection();
+        var stmt = conn.prepareStatement("SELECT * FROM Trainer WHERE Email = ? AND Password = ?");
+        stmt.setString(1, email);
+        stmt.setString(2, password);
+        var login = stmt.executeQuery();
+        if (!login.next()) 
+            {
+                throw new SQLException("Invalid email or password.");
+            }
+        return new Trainer(login.getInt("TrainerID"), login.getString("Name"), login.getString("Email"), login.getString("Password"));
+    }
 }

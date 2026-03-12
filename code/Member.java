@@ -7,21 +7,21 @@ public class Member
 { // begin class 
     // variables
     private int MemberID;
-    public static int nextID = 1;
     private String Name;
     private String Email;
     private String PhoneNumber;
     private String dateOfBirth;
+    private String Password;
 
     // constructor
-    public Member(String name, String email, String phoneNumber, String dateOfBirth)
+    public Member(int memberID, String name, String email, String phoneNumber, String dateOfBirth, String password)
     {
-        this.MemberID = nextID;
-        nextID++;
+        this.MemberID = memberID;
         this.Name = name;
         this.Email = email;
         this.PhoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
+        this.Password = password;
     }
 
     // getters and setters
@@ -50,6 +50,11 @@ public class Member
             return dateOfBirth;
         }
 
+    public String getPassword() 
+        {
+            return Password;
+        }
+
     public void setName(String name) 
         {
             Name = name;
@@ -68,6 +73,11 @@ public class Member
     public void setDateOfBirth(String dateOfBirth) 
         {
             this.dateOfBirth = dateOfBirth;
+        }
+
+    public void setPassword(String password) 
+        {
+            Password = password;
         }
 
 } // end class

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GymGui",
+            "request": "launch",
+            "mainClass": "GymGui",
+            "projectName": "GymSystem_9f43ef8b"
+        },
+        {
+            "type": "java",
             "name": "GymGUI",
             "request": "launch",
             "mainClass": "GymGUI",

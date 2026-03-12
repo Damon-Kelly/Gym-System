@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class UpdateTrainer
 {
-    public static void updateTrainer(int trainerID, String name, String email) 
+    public static void updateTrainer(int trainerID, String name, String email, String password) 
     {
         Connection connection = null;
         PreparedStatement pstat = null;
@@ -19,10 +19,11 @@ public class UpdateTrainer
                 // establish connection to database
                 connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("UPDATE Trainer SET Name = ?, Email = ? WHERE TrainerID = ?");
+                pstat = connection.prepareStatement("UPDATE Trainer SET Name = ?, Email = ?, Password = ? WHERE TrainerID = ?");
                 pstat . setString (1, name);
                 pstat . setString (2, email);
-                pstat . setInt (3, trainerID);
+                pstat . setString (3, password);
+                pstat . setInt (4, trainerID);
                 // insert data into table
                 i = pstat .executeUpdate();
                 System.out. println ( i + " record successfully modified in the table.");

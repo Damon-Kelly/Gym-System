@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class InsertTrainer 
 {
-    public static void insertTrainer(String name, String email) 
+    public static void insertTrainer(String name, String email, String password) 
     {
         Connection connection = null;
         PreparedStatement pstat = null;
@@ -19,9 +19,10 @@ public class InsertTrainer
                 // establish connection to database
                 connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("INSERT INTO Trainer (Name, Email) VALUES (?,?)");
+                pstat = connection.prepareStatement("INSERT INTO Trainer (Name, Email, Password) VALUES (?,?,?)");
                 pstat . setString (1, name);
                 pstat . setString (2, email);
+                pstat . setString (3, password);
                 // insert data into table
                 i = pstat .executeUpdate();
                 System.out. println ( i + " record successfully added to the table .");

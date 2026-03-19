@@ -10,40 +10,74 @@ import java.awt.event.ActionEvent;
 
 public class GymGui extends JFrame
 {
-    private JPanel loginPanel;
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private JButton submitButton;
-    private JButton clearButton;
+    private JPanel memberPanel;
+    private JPanel trainerPanel;
+    private JTextField memberEmailField;
+    private JPasswordField memberPasswordField;
+    private JButton memberSubmitButton;
+    private JButton memberClearButton;
+    
+    private JTextField trainerEmailField;
+    private JPasswordField trainerPasswordField;
+    private JButton trainerSubmitButton;
+    private JButton trainerClearButton;
 
     public GymGui()
     {
-        super("Gym System Login");
+        super("Gym Login System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 400);
         setLocationRelativeTo(null);
+        
+        JTabbedPane tabbedPane = new JTabbedPane();
+        
+        // Member Login Tab
+        memberPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        memberPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        memberEmailField = new JTextField();
+        memberPasswordField = new JPasswordField();
+        memberSubmitButton = new JButton("Submit");
+        memberClearButton = new JButton("Clear");
 
-        setLayout(new BorderLayout());
-        loginPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-        emailField = new JTextField();
-        passwordField = new JPasswordField();
-        submitButton = new JButton("Submit");
-        clearButton = new JButton("Clear");
+        memberPanel.add(new JLabel("Email:"));
+        memberPanel.add(memberEmailField);
+        memberPanel.add(new JLabel("Password:"));
+        memberPanel.add(memberPasswordField);
+        memberPanel.add(memberSubmitButton);  
+        memberPanel.add(memberClearButton);
 
-        loginPanel.add(new JLabel("Email:"));
-        loginPanel.add(emailField);
-        loginPanel.add(new JLabel("Password:"));
-        loginPanel.add(passwordField);
-        loginPanel.add(submitButton);  
-        loginPanel.add(clearButton);
+        TextFieldHandler memberHandler = new TextFieldHandler();
+        memberEmailField.addActionListener(memberHandler);
+        memberPasswordField.addActionListener(memberHandler);
+        memberSubmitButton.addActionListener(memberHandler);
+        memberClearButton.addActionListener(memberHandler);
 
-        TextFieldHandler handler = new TextFieldHandler();
-        emailField.addActionListener(handler);
-        passwordField.addActionListener(handler);
-        submitButton.addActionListener(handler);
-        clearButton.addActionListener(handler);
+        // Trainer Login Tab
+        trainerPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        trainerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        trainerEmailField = new JTextField();
+        trainerPasswordField = new JPasswordField();
+        trainerSubmitButton = new JButton("Submit");
+        trainerClearButton = new JButton("Clear");
 
-        add(loginPanel, BorderLayout.CENTER);
+        trainerPanel.add(new JLabel("Email:"));
+        trainerPanel.add(trainerEmailField);
+        trainerPanel.add(new JLabel("Password:"));
+        trainerPanel.add(trainerPasswordField);
+        trainerPanel.add(trainerSubmitButton);
+        trainerPanel.add(trainerClearButton);
+
+        TextFieldHandler trainerHandler = new TextFieldHandler();
+        trainerEmailField.addActionListener(trainerHandler);
+        trainerPasswordField.addActionListener(trainerHandler);
+        trainerSubmitButton.addActionListener(trainerHandler);
+        trainerClearButton.addActionListener(trainerHandler);
+
+        // Add tabs to tabbed pane
+        tabbedPane.addTab("Member Login", memberPanel);
+        tabbedPane.addTab("Trainer Login", trainerPanel);
+
+        add(tabbedPane, BorderLayout.CENTER);
     }
 
     // private inner class for event handling
@@ -51,44 +85,56 @@ public class GymGui extends JFrame
     {
         public void actionPerformed(ActionEvent event)
         {
-            String string = "";
-            if (event.getSource() == emailField)
-                    {
-                        string = String.format( "emailField : %s", event .getActionCommand());
-                    }
-            
-            else if (event.getSource() == passwordField)
+            if (event.getSource() == memberSubmitButton)
                 {
-                    string = String.format( "passwordField : %s", event .getActionCommand());
-                }
-            
-            else if (event.getSource() == submitButton)
-                {
-                    String email = emailField.getText();
-                    String password = new String(passwordField.getPassword());
-                    
-                    try {
-                        // Call database validation method
-                        Member member = Database.authenticateMember(email, password);
-                        if (member != null) 
-                            {
-                                JOptionPane.showMessageDialog(null, "Login successful! Welcome " + member.getName());
-                            } 
-                        else 
-                            {
-                                JOptionPane.showMessageDialog(null, "Invalid email or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
-                            }
-                        } 
-                    catch (Exception e) 
+                    try
                         {
-                            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            String email = memberEmailField.getText();
+                            Validator.validateEmail(email);
+                            String password = new String(memberPasswordField.getPassword());
+                            Validator.validateNotEmpty(password, "Password");
+                            Member member = Database.authenticateMember(email, password);
+                            JOptionPane.showMessageDialog(null, "Login successful! Welcome " + member.getName());
+                            dispose(); // Close the login window
+                            MemberDashboard memberDashboard = new MemberDashboard(member);
+                        }
+                    catch (ValidationException ve)
+                        {
+                            JOptionPane.showMessageDialog(null, ve.getMessage(), "Input Validation Error", JOptionPane.ERROR_MESSAGE);
+                            return; // Stop further processing if validation fails
+                        }
+                    catch (Exception e)
+                        {
+                            JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            return; // Stop further processing if an unexpected error occurs
                         }
                 }
             
-            else if (event.getSource() == clearButton)
+            else if (event.getSource() == memberClearButton)
                 {
-                    emailField.setText("");
-                    passwordField.setText("");
+                    memberEmailField.setText("");
+                    memberPasswordField.setText("");
+                }
+            
+            else if (event.getSource() == trainerSubmitButton)
+                {
+                    String email = trainerEmailField.getText();
+                    String password = new String(trainerPasswordField.getPassword());
+                    
+                    try {
+                        Trainer trainer = Database.authenticateTrainer(email, password);
+                        JOptionPane.showMessageDialog(null, "Login successful! Welcome " + trainer.getName());
+                        } 
+                    catch (Exception e) 
+                        {
+                            JOptionPane.showMessageDialog(null, e.getMessage(), "Login Failed", JOptionPane.ERROR_MESSAGE);
+                        }
+                }
+            
+            else if (event.getSource() == trainerClearButton)
+                {
+                    trainerEmailField.setText("");
+                    trainerPasswordField.setText("");
                 }
         }
     } // end private inner class

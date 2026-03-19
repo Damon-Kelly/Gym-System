@@ -118,16 +118,26 @@ public class GymGui extends JFrame
             
             else if (event.getSource() == trainerSubmitButton)
                 {
-                    String email = trainerEmailField.getText();
-                    String password = new String(trainerPasswordField.getPassword());
-                    
-                    try {
-                        Trainer trainer = Database.authenticateTrainer(email, password);
-                        JOptionPane.showMessageDialog(null, "Login successful! Welcome " + trainer.getName());
-                        } 
-                    catch (Exception e) 
+                    try
                         {
-                            JOptionPane.showMessageDialog(null, e.getMessage(), "Login Failed", JOptionPane.ERROR_MESSAGE);
+                            String email = trainerEmailField.getText();
+                            Validator.validateEmail(email);
+                            String password = new String(trainerPasswordField.getPassword());
+                            Validator.validateNotEmpty(password, "Password");
+                            Trainer trainer = Database.authenticateTrainer(email, password);
+                            JOptionPane.showMessageDialog(null, "Login successful! Welcome " + trainer.getName());
+                            dispose(); // Close the login window
+                            TrainerDashboard trainerDashboard = new TrainerDashboard(trainer);
+                        }
+                    catch (ValidationException ve)
+                        {
+                            JOptionPane.showMessageDialog(null, ve.getMessage(), "Input Validation Error", JOptionPane.ERROR_MESSAGE);
+                            return; // Stop further processing if validation fails
+                        }
+                    catch (Exception e)
+                        {
+                            JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            return; // Stop further processing if an unexpected error occurs
                         }
                 }
             

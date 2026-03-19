@@ -10,14 +10,18 @@ public class Booking
     private String BookingDate;
     private String Status;
     private int deletedFlag;
+    private int memberID;
+    private int classID;
 
     // constructor
-    public Booking(int bookingID, String bookingDate, String status, int deletedFlag)
+    public Booking(int bookingID, String bookingDate, String status, int memberID, int classID, int deletedFlag)
     {
         this.BookingID = bookingID;
         this.BookingDate = bookingDate;
         this.Status = status;
         this.deletedFlag = deletedFlag;
+        this.memberID = memberID;
+        this.classID = classID;
     }
 
     // getters and setters
@@ -41,6 +45,16 @@ public class Booking
             return deletedFlag;
         }
 
+    public int getClassID()
+        {
+            return classID;
+        }
+
+    public int getMemberID()
+        {
+            return memberID;
+        }
+
     public void setBookingDate(String bookingDate) 
         {
             BookingDate = bookingDate;
@@ -54,6 +68,16 @@ public class Booking
     public void setDeleted(int Flag)
         {
             deletedFlag = Flag;
+        }
+
+    public void setClassID(int classId)
+        {
+            classID = classId;
+        }
+
+    public void setMemberID(int memberId)
+        {
+            memberID = memberId;
         }
 
 } // end class

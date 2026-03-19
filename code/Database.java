@@ -44,4 +44,17 @@ public class Database
             }
         return new Trainer(login.getInt("TrainerID"), login.getString("Name"), login.getString("Email"), login.getString("Password"), login.getInt("DeletedFlag"));
     }
+
+    public static Booking authenticateBooking(int bookingID) throws SQLException 
+    {
+        Connection conn = getConnection();
+        var stmt = conn.prepareStatement("SELECT * FROM Booking WHERE BookingID = ?");
+        stmt.setInt(1, bookingID);
+        var login = stmt.executeQuery();
+        if (!login.next()) 
+            {
+                throw new SQLException("Invalid email or password.");
+            }
+        return new Booking(login.getInt("BookingID"), login.getString("BookingDate"), login.getString("Status"), login.getInt("MemberID"), login.getInt("ClassID"), login.getInt("DeletedFlag"));
+    }
 }

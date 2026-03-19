@@ -16,6 +16,9 @@ public class MemberDashboard extends JFrame
     private JButton bookTrainerButton;
     private JButton logoutButton;
 
+    private String email;
+    private String password;
+
     public MemberDashboard(Member member)
     {
         // default setup
@@ -47,6 +50,9 @@ public class MemberDashboard extends JFrame
         logoutButton.addActionListener(memberHandler);
         panel.add(logoutButton);
 
+        email = member.getEmail();
+        password = member.getPassword();
+
         add(panel);
         setVisible(true);
     }
@@ -66,7 +72,25 @@ public class MemberDashboard extends JFrame
         
             else if (event.getSource() == myMembershipButton)
                 {
-                    JOptionPane.showMessageDialog(null, "My Membership selected.");
+                    try
+                        {
+                            Validator.validateEmail(email);
+                            Validator.validatePassword(password);
+                            Member member = Database.authenticateMember(email, password);
+                            dispose(); // Close the dashboard window
+                            ManageMembership manageMembership = new ManageMembership(member); // Open the login window again
+                            manageMembership.setVisible(true);
+                        }
+                    catch (ValidationException ve)
+                        {
+                            JOptionPane.showMessageDialog(null, ve.getMessage(), "Input Validation Error", JOptionPane.ERROR_MESSAGE);
+                            return; // Stop further processing if validation fails
+                        }
+                    catch (Exception e)
+                        {
+                            JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            return; // Stop further processing if an unexpected error occurs
+                        }
                 }
             else if (event.getSource() == bookClassButton)
                 {

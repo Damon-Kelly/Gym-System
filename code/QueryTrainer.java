@@ -20,7 +20,7 @@ public class QueryTrainer
                 // establish connection to database
                 connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("SELECT TrainerID, Name, Email FROM Trainer");
+                pstat = connection.prepareStatement("SELECT TrainerID, Name, Email FROM Trainer WHERE DeletedFlag != 1");
                 // insert data into table
                 resultSet = pstat .executeQuery();
                 

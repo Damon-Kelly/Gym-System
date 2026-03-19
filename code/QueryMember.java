@@ -20,7 +20,7 @@ public class QueryMember
                 // establish connection to database
                 connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("SELECT MemberID, Name, Email, PhoneNumber, DateOfBirth FROM Member");
+                pstat = connection.prepareStatement("SELECT MemberID, Name, Email, PhoneNumber, DateOfBirth FROM Member WHERE DeletedFlag != 1");
                 // insert data into table
                 resultSet = pstat .executeQuery();
                 

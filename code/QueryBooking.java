@@ -20,7 +20,7 @@ public class QueryBooking
                 // establish connection to database
                 connection = Database.getConnection();
                 // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("SELECT BookingID, BookingDate, Status FROM Booking");
+                pstat = connection.prepareStatement("SELECT BookingID, BookingDate, Status FROM Booking WHERE DeletedFlag != 1");
                 // insert data into table
                 resultSet = pstat .executeQuery();
                 

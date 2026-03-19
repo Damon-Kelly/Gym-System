@@ -7,19 +7,19 @@ public class Class
 { // begin class 
     // variables
     private int ClassID;
-    public static int nextID = 1;
     private String Title;
     private String Schedule;
     private int Capacity;
+    private int deletedFlag;
 
     // constructor
-    public Class(String Title, String Schedule, int Capacity)
+    public Class(int classID, String Title, String Schedule, int Capacity, int deletedFlag)
     {
-        this.ClassID = nextID;
-        nextID++;
+        this.ClassID = classID;
         this.Title = Title;
         this.Schedule = Schedule;
         this.Capacity = Capacity;
+        this.deletedFlag = deletedFlag;
     }
 
     // getters and setters
@@ -42,6 +42,11 @@ public class Class
         {
             return Capacity;
         }
+    
+    public int getDeleted()
+        {
+            return deletedFlag;
+        }
 
     public void setTitle(String title) 
         {
@@ -56,6 +61,11 @@ public class Class
     public void setCapacity(int capacity) 
         {
             Capacity = capacity;
+        }
+
+    public void setDeleted(int Flag)
+        {
+            deletedFlag = Flag;
         }
 
 } // end class

@@ -27,7 +27,7 @@ public class Database
             {
                 throw new SQLException("Invalid email or password.");
             }
-        return new Member(login.getInt("MemberID"), login.getString("Name"), login.getString("Email"), login.getString("PhoneNumber"), login.getString("dateOfBirth"), login.getString("Password"));
+        return new Member(login.getInt("MemberID"), login.getString("Name"), login.getString("Email"), login.getString("PhoneNumber"), login.getString("dateOfBirth"), login.getString("Password"), login.getInt("DeletedFlag"));
 
     }
 
@@ -42,6 +42,6 @@ public class Database
             {
                 throw new SQLException("Invalid email or password.");
             }
-        return new Trainer(login.getInt("TrainerID"), login.getString("Name"), login.getString("Email"), login.getString("Password"));
+        return new Trainer(login.getInt("TrainerID"), login.getString("Name"), login.getString("Email"), login.getString("Password"), login.getInt("DeletedFlag"));
     }
 }

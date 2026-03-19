@@ -7,23 +7,23 @@ public class Membership
 { // begin class 
     // variables
     private int MembershipID;
-    public static int nextID = 1;
     private String PlanType;
     private String StartDate;
     private String EndDate;
     private int IsActive;
     private int MemberID;
+    private int deletedFlag;
 
     // constructor
-    public Membership(String PlanType, String StartDate, String EndDate, int IsActive, int memberID)
+    public Membership(int membershipID, String PlanType, String StartDate, String EndDate, int IsActive, int memberID, int deletedFlag)
     {
-        this.MembershipID = nextID;
-        nextID++;
+        this.MembershipID = membershipID;
         this.PlanType = PlanType;
         this.StartDate = StartDate;
         this.EndDate = EndDate;
         this.IsActive = IsActive;
         this.MemberID = memberID;
+        this.deletedFlag = deletedFlag;
     }
 
     // getters and setters
@@ -57,6 +57,11 @@ public class Membership
             return MemberID;
         }
 
+    public int getDeleted()
+        {
+            return deletedFlag;
+        }
+
     public void setPlanType(String planType) 
         {
             PlanType = planType;
@@ -80,6 +85,11 @@ public class Membership
     public void setMemberID(int memberID) 
         {
             MemberID = memberID;
+        }
+
+    public void setDeleted(int Flag)
+        {
+            deletedFlag = Flag;
         }
 
 } // end class

@@ -10,14 +10,16 @@ public class Trainer
     private String Name;
     private String Email;
     private String Password;
+    private int deletedFlag;
 
     // constructor
-    public Trainer(int TrainerID, String Name, String Email, String Password)
+    public Trainer(int TrainerID, String Name, String Email, String Password, int deletedFlag)
     {
         this.TrainerID = TrainerID;
         this.Name = Name;
         this.Email = Email;
         this.Password = Password;
+        this.deletedFlag = deletedFlag;
     }
 
     // getters and setters
@@ -41,6 +43,11 @@ public class Trainer
             return Password;
         }
 
+    public int getDeleted()
+        {
+            return deletedFlag;
+        }
+
     public void setName(String name) 
         {
             Name = name;
@@ -55,4 +62,10 @@ public class Trainer
         {
             Password = password;
         }
+
+    public void setDeleted(int Flag)
+        {
+            deletedFlag = Flag;
+        }
+
 } // end class

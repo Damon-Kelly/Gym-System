@@ -7,17 +7,17 @@ public class Booking
 { // begin class 
     // variables
     private int BookingID;
-    public static int nextID = 1;
     private String BookingDate;
     private String Status;
+    private int deletedFlag;
 
     // constructor
-    public Booking(String bookingDate, String status)
+    public Booking(int bookingID, String bookingDate, String status, int deletedFlag)
     {
-        this.BookingID = nextID;
-        nextID++;
+        this.BookingID = bookingID;
         this.BookingDate = bookingDate;
         this.Status = status;
+        this.deletedFlag = deletedFlag;
     }
 
     // getters and setters
@@ -36,6 +36,11 @@ public class Booking
             return Status;
         }
 
+    public int getDeleted()
+        {
+            return deletedFlag;
+        }
+
     public void setBookingDate(String bookingDate) 
         {
             BookingDate = bookingDate;
@@ -44,6 +49,11 @@ public class Booking
     public void setStatus(String status) 
         {            
             Status = status;
+        }
+
+    public void setDeleted(int Flag)
+        {
+            deletedFlag = Flag;
         }
 
 } // end class

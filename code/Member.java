@@ -12,9 +12,10 @@ public class Member
     private String PhoneNumber;
     private String dateOfBirth;
     private String Password;
+    private int deletedFlag;
 
     // constructor
-    public Member(int memberID, String name, String email, String phoneNumber, String dateOfBirth, String password)
+    public Member(int memberID, String name, String email, String phoneNumber, String dateOfBirth, String password, int deletedFlag)
     {
         this.MemberID = memberID;
         this.Name = name;
@@ -22,6 +23,7 @@ public class Member
         this.PhoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
         this.Password = password;
+        this.deletedFlag = deletedFlag;
     }
 
     // getters and setters
@@ -55,6 +57,11 @@ public class Member
             return Password;
         }
 
+    public int getDeleted()
+        {
+            return deletedFlag;
+        }
+
     public void setName(String name) 
         {
             Name = name;
@@ -78,6 +85,11 @@ public class Member
     public void setPassword(String password) 
         {
             Password = password;
+        }
+
+    public void setDeleted(int Flag)
+        {
+            deletedFlag = Flag;
         }
 
 } // end class

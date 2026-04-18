@@ -3,10 +3,10 @@
 // Date :				12/03/2026
 // Purpose : 			The gui for the gym system
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class GymGui extends JFrame
 {
@@ -96,7 +96,7 @@ public class GymGui extends JFrame
                             Member member = Database.authenticateMember(email, password);
                             JOptionPane.showMessageDialog(null, "Login successful! Welcome " + member.getName());
                             dispose(); // Close the login window
-                            MemberDashboard memberDashboard = new MemberDashboard(member);
+                            new MemberDashboard(member.getMemberID(), member.getName());
                         }
                     catch (ValidationException ve)
                         {
@@ -127,7 +127,7 @@ public class GymGui extends JFrame
                             Trainer trainer = Database.authenticateTrainer(email, password);
                             JOptionPane.showMessageDialog(null, "Login successful! Welcome " + trainer.getName());
                             dispose(); // Close the login window
-                            TrainerDashboard trainerDashboard = new TrainerDashboard(trainer);
+                            new TrainerDashboard(trainer.getTrainerID());
                         }
                     catch (ValidationException ve)
                         {

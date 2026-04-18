@@ -1,73 +1,69 @@
-// Student Name : 		Damon Kelly
-// Student Id Number : 	C00307057
-// Date :				19/03/2026
-// Purpose : 			The gui for the trainer dashboard
+// Student Name :      Damon Kelly
+// Student Id Number : C00307057
+// Date :              11/04/2026
+// Purpose :           GUI for the trainer dashboard with menu options.
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class TrainerDashboard extends JFrame
 {
-    // declare the elements used
     private JButton manageClasses;
     private JButton viewSchedule;
     private JButton logoutButton;
 
-    public TrainerDashboard(Trainer trainer)
+    private int trainerID; // changed from Trainer object
+
+    public TrainerDashboard(int trainerID) // changed from Trainer trainer
     {
-        // default page setup
         super("Trainer Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);
-        
-        // page setup
-        JPanel panel = new JPanel(new GridLayout(5, 1, 10, 10));
-        // add a border
+
+        this.trainerID = trainerID;
+
+        // Fixed: was GridLayout(5, 1) but only 4 components were added,
+        // leaving an ugly empty row at the bottom of the panel.
+        JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(30, 100, 30, 100));
 
-        // welcome the trainer
-        panel.add(new JLabel("Welcome, " + trainer.getName() + "!", JLabel.CENTER));
-
-        // add the buttons to the panel
+        panel.add(new JLabel("Welcome, Trainer!", JLabel.CENTER));
         panel.add(manageClasses = new JButton("Manage Classes"));
-        panel.add(viewSchedule = new JButton("View Schedule"));
+        panel.add(viewSchedule  = new JButton("View Schedule"));
+        panel.add(logoutButton  = new JButton("Logout"));
 
-        // use the event handling class
-        TrainerHandler TrainerHandler = new TrainerHandler();
-        logoutButton = new JButton("Logout");
-        manageClasses.addActionListener(TrainerHandler);
-        viewSchedule.addActionListener(TrainerHandler);
-        logoutButton.addActionListener(TrainerHandler);
-        panel.add(logoutButton);
+        TrainerHandler trainerHandler = new TrainerHandler();
+        manageClasses.addActionListener(trainerHandler);
+        viewSchedule.addActionListener(trainerHandler);
+        logoutButton.addActionListener(trainerHandler);
 
-        // this makes it visible
         add(panel);
         setVisible(true);
     }
 
-    // private inner class for event handling
     private class TrainerHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
         {
             if (event.getSource() == logoutButton)
-                {
-                    dispose(); // Close the dashboard window
-                    GymGui gymGui = new GymGui(); // Open the login window again
-                    gymGui.setVisible(true);
-                }
-        
+            {
+                dispose();
+                new GymGui().setVisible(true);
+            }
             else if (event.getSource() == manageClasses)
-                {
-                    JOptionPane.showMessageDialog(null, "Manage Classes selected.");
-                }
+            {
+                dispose();
+                new ManageClasses(trainerID);
+            }
             else if (event.getSource() == viewSchedule)
-                {
-                    JOptionPane.showMessageDialog(null, "View Schedule selected.");
-                }
+            {
+                dispose();
+                new ViewSchedule(trainerID);
+            }
         }
     }
-}
+
+} // end class

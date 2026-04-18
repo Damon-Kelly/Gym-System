@@ -1,26 +1,30 @@
 // Student Name :      Damon Kelly
 // Student Id Number : C00307057
-// Date :              12/03/2026
+// Date :              13/04/2026
 // Purpose :           class for validating user input before sending to the database.
 //                     Throws ValidationException (custom checked exception) on invalid input.
 
 public class Validator
-{ // begin class
-    // Method to check if a string is null or empty
+{
+    // Validates that a string is not null or empty (including whitespace-only)
     public static void validateNotEmpty(String input, String fieldName) throws ValidationException
     {
         if (input == null)
             {
                 throw new ValidationException(fieldName + " cannot be null.");
             }
+        if (input.trim().isEmpty())
+            {
+                throw new ValidationException(fieldName + " cannot be empty or blank.");
+            }
     }
 
-    // Method to check if a string is a valid email address
+    // Validates that a string is a valid email address (contains @ symbol)
     public static void validateEmail(String email) throws ValidationException
     {
-        if (email == null)
+        if (email == null || email.isEmpty())
             {
-                throw new ValidationException("Invalid email format, email cannot be null.");
+                throw new ValidationException("Invalid email format, email cannot be null or empty.");
             }
         for (int i = 0; i < email.length(); i++)
             {
@@ -32,10 +36,10 @@ public class Validator
         throw new ValidationException("Invalid email format, email must contain @ symbol.");
     }
 
-    // Method to check if a string is a valid phone number (digits only, length 10)
+    // Validates that a string is a valid phone number (digits only, length 8-15)
     public static void validatePhoneNumber(String phoneNumber) throws ValidationException
     {
-        if (phoneNumber == null || phoneNumber.length() <= 8 || phoneNumber.length() > 15)
+        if (phoneNumber == null || phoneNumber.length() < 8 || phoneNumber.length() > 15)
             {
                 throw new ValidationException("Phone number must be between 8 and 15 digits long.");
             }
@@ -48,7 +52,7 @@ public class Validator
             }
     }
 
-    // Method to check if a string is a valid date in the format YYYY-MM-DD
+    // Validates that a string is a valid date in the format YYYY-MM-DD
     public static void validateDate(String date) throws ValidationException
     {
         if (date == null || date.length() != 10 || date.charAt(4) != '-' || date.charAt(7) != '-')
@@ -82,7 +86,7 @@ public class Validator
             }
     }
 
-    // Method to check if a date of birth is valid (not in the future/too old)
+    // Validates that a date of birth is reasonable (year between 1940 and 2010)
     public static void validateDateOfBirth(String dateOfBirth) throws ValidationException
     {
         validateDate(dateOfBirth);
@@ -99,10 +103,9 @@ public class Validator
             {
                 throw new ValidationException("Date of birth must contain valid numbers.");
             }
-
     }
 
-    // Method to validate passwords
+    // Validates that a password is at least 6 characters long
     public static void validatePassword(String password) throws ValidationException
     {
         if (password == null || password.length() < 6)
@@ -111,7 +114,7 @@ public class Validator
             }
     }
 
-    // Method to validate IDs
+    // Validates that an ID is a positive integer
     public static void validateID(int id) throws ValidationException
     {
         if (id <= 0)
@@ -120,7 +123,7 @@ public class Validator
             }
     }
 
-    // Method to validate boolean inputs in the form of 0 or 1
+    // Validates that a boolean input is 0 or 1
     public static void validateBoolean(int input) throws ValidationException
     {
         if (input != 0 && input != 1)
@@ -129,7 +132,7 @@ public class Validator
             }
     }
 
-    // Method to validate class capacity (must be a positive integer)
+    // Validates that class capacity is a positive integer
     public static void validateClassCapacity(int capacity) throws ValidationException
     {
         if (capacity <= 0)
@@ -138,7 +141,7 @@ public class Validator
             }
     }
 
-    // Method to make sure startdate is before enddate 
+    // Validates that start date is before end date
     public static void validateStartEndDate(String startDate, String endDate) throws ValidationException
     {
         validateDate(startDate);
@@ -157,7 +160,8 @@ public class Validator
                 int endYear = Integer.parseInt(endYearStr);
                 int endMonth = Integer.parseInt(endMonthStr);
                 int endDay = Integer.parseInt(endDayStr);
-                if (startYear > endYear || (startYear == endYear && startMonth > endMonth) || (startYear == endYear && startMonth == endMonth && startDay > endDay))
+                if (startYear > endYear || (startYear == endYear && startMonth > endMonth) ||
+                    (startYear == endYear && startMonth == endMonth && startDay >= endDay))
                     {
                         throw new ValidationException("Start date must be before end date.");
                     }
@@ -168,7 +172,7 @@ public class Validator
             }
     }
 
-    // Method to validate class times (must be in the format HH:MM and valid time)
+    // Validates that a time is in the format HH:MM and represents a valid time
     public static void validateClassTime(String time) throws ValidationException
     {
         if (time == null || time.length() != 5 || time.charAt(2) != ':')
@@ -195,4 +199,4 @@ public class Validator
                 throw new ValidationException("Time must contain valid numbers.");
             }
     }
-} // end class
+}

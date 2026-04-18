@@ -1,105 +1,151 @@
-// Student Name : 		Damon Kelly
-// Student Id Number : 	C00307057
-// Date :				12/03/2026
-// Purpose : 			The gui for member dashboard
+// Student Name :      Damon Kelly
+// Student Id Number : C00307057
+// Date :              14/04/2026
+// Purpose :           GUI for member dashboard showing welcome, membership status, and booking options.
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class MemberDashboard extends JFrame
 {
-    // declare the elements that will be used
     private JButton myMembershipButton;
     private JButton bookClassButton;
-    private JButton bookTrainerButton;
+    private JButton myBookingsButton;
     private JButton logoutButton;
 
-    private String email;
-    private String password;
+    private int memberID;
+    private String memberName;
 
-    public MemberDashboard(Member member)
+    public MemberDashboard(int memberID, String memberName)
     {
-        // default setup
         super("Member Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
-        // this centers the page on the screen
+        setSize(700, 550);
         setLocationRelativeTo(null);
+
+        this.memberID = memberID;
+        this.memberName = memberName;
+
+        // --- Main panel with better structure ---
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(new Color(240, 240, 240));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+
+        // --- Header section ---
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        headerPanel.setOpaque(false);
         
-        // set the parameters for the page layout
-        JPanel panel = new JPanel(new GridLayout(5, 1, 10, 10));
-        // set a border around the page
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 100, 30, 100));
+        JLabel welcomeLabel = new JLabel("Welcome, " + memberName + "!");
+        welcomeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        headerPanel.add(welcomeLabel);
+        
+        headerPanel.add(Box.createVerticalStrut(10));
 
-        // welcome the member
-        panel.add(new JLabel("Welcome, " + member.getName() + "!", JLabel.CENTER));
+        // Membership status label with better styling
+        String[] membership = QueryHelpers.getMembershipByMemberID(memberID);
+        JLabel statusLabel = new JLabel();
+        statusLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        if (membership != null)
+        {
+            statusLabel.setText("✓ Active Membership: " + membership[0] + " (expires " + membership[2] + ")");
+            statusLabel.setForeground(new Color(0, 120, 0));
+        }
+        else
+        {
+            statusLabel.setText("⚠ No active membership");
+            statusLabel.setForeground(new Color(200, 0, 0));
+        }
+        headerPanel.add(statusLabel);
+        mainPanel.add(headerPanel);
+        
+        mainPanel.add(Box.createVerticalStrut(30));
 
-        // add the buttons with text
-        panel.add(myMembershipButton = new JButton("My Membership"));
-        panel.add(bookClassButton = new JButton("Book a Class"));
-        panel.add(bookTrainerButton = new JButton("Book a Trainer"));
+        // --- Button section ---
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(4, 1, 0, 15));
+        buttonPanel.setOpaque(false);
+        buttonPanel.setMaximumSize(new Dimension(300, 250));
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // use the event handling class
+        myMembershipButton = createStyledButton("My Membership", new Color(100, 150, 255));
+        bookClassButton = createStyledButton("Book a Class", new Color(100, 200, 100));
+        myBookingsButton = createStyledButton("View My Bookings", new Color(255, 180, 100));
+        logoutButton = createStyledButton("Logout", new Color(230, 100, 100));
+
+        buttonPanel.add(myMembershipButton);
+        buttonPanel.add(bookClassButton);
+        buttonPanel.add(myBookingsButton);
+        buttonPanel.add(logoutButton);
+
+        mainPanel.add(buttonPanel);
+        mainPanel.add(Box.createVerticalGlue());
+
         MemberHandler memberHandler = new MemberHandler();
-        logoutButton = new JButton("Logout");
         myMembershipButton.addActionListener(memberHandler);
         bookClassButton.addActionListener(memberHandler);
-        bookTrainerButton.addActionListener(memberHandler);
+        myBookingsButton.addActionListener(memberHandler);
         logoutButton.addActionListener(memberHandler);
-        panel.add(logoutButton);
 
-        email = member.getEmail();
-        password = member.getPassword();
-
-        add(panel);
+        add(mainPanel);
         setVisible(true);
     }
 
-    // private inner class for event handling
+    private JButton createStyledButton(String text, Color bgColor)
+    {
+        JButton button = new JButton(text);
+        button.setFont(new Font("SansSerif", Font.BOLD, 14));
+        button.setBackground(bgColor);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setOpaque(true);
+        button.setPreferredSize(new Dimension(300, 50));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Add hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor);
+            }
+        });
+        
+        return button;
+    }
+
     private class MemberHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent event)
         {
-            // if user chooses logout close current page and reopen the login
             if (event.getSource() == logoutButton)
-                {
-                    dispose(); // Close the dashboard window
-                    GymGui gymGui = new GymGui(); // Open the login window again
-                    gymGui.setVisible(true);
-                }
-        
+            {
+                dispose();
+                new GymGui().setVisible(true);
+            }
             else if (event.getSource() == myMembershipButton)
-                {
-                    try
-                        {
-                            Validator.validateEmail(email);
-                            Validator.validatePassword(password);
-                            Member member = Database.authenticateMember(email, password);
-                            dispose(); // Close the dashboard window
-                            ManageMembership manageMembership = new ManageMembership(member); // Open the login window again
-                            manageMembership.setVisible(true);
-                        }
-                    catch (ValidationException ve)
-                        {
-                            JOptionPane.showMessageDialog(null, ve.getMessage(), "Input Validation Error", JOptionPane.ERROR_MESSAGE);
-                            return; // Stop further processing if validation fails
-                        }
-                    catch (Exception e)
-                        {
-                            JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                            return; // Stop further processing if an unexpected error occurs
-                        }
-                }
+            {
+                dispose();
+                new ManageMembership(memberID, memberName);
+            }
             else if (event.getSource() == bookClassButton)
-                {
-                    JOptionPane.showMessageDialog(null, "Book a Class selected.");
-                }
-            else if (event.getSource() == bookTrainerButton)
-                {
-                    JOptionPane.showMessageDialog(null, "Book a Trainer selected.");
-                }
+            {
+                dispose();
+                new BookClass(memberID, memberName);
+            }
+            else if (event.getSource() == myBookingsButton)
+            {
+                dispose();
+                new ViewMyBookings(memberID, memberName);
+            }
         }
     }
-}
+
+} // end class

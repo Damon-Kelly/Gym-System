@@ -61,7 +61,7 @@ public class QueryHelpers
         return membership;
     }
 
-    // Returns all gym classes as a simple array.
+    // Returns all gym classes as a simple array including remaining seats.
     public static String[][] getAllClasses()
     {
         Connection connection       = null;
@@ -74,18 +74,31 @@ public class QueryHelpers
             {
                 connection = Database.getConnection();
                 pstat = connection.prepareStatement(
-                    "SELECT ClassID, Title, Schedule, Capacity FROM Class"
+                    "SELECT c.ClassID, c.Title, c.Schedule, c.Capacity, " +
+                    "COUNT(b.BookingID) AS BookedCount " +
+                    "FROM Class c " +
+                    "LEFT JOIN Booking b ON c.ClassID = b.ClassID AND b.DeletedFlag != 1 AND b.Status = 'Confirmed' " +
+                    "GROUP BY c.ClassID, c.Title, c.Schedule, c.Capacity"
                 );
                 resultSet = pstat.executeQuery();
 
                 while (resultSet.next())
                     {
+                        int classID = resultSet.getInt("ClassID");
+                        String title = resultSet.getString("Title");
+                        String schedule = resultSet.getString("Schedule");
+                        int capacity = resultSet.getInt("Capacity");
+                        int booked = resultSet.getInt("BookedCount");
+                        int remaining = Math.max(0, capacity - booked);
+                        String remainingText = remaining == 0 ? "Full" : String.valueOf(remaining);
+
                         String[] row = new String[]
                         {
-                            String.valueOf(resultSet.getInt("ClassID")),
-                            resultSet.getString("Title"),
-                            resultSet.getString("Schedule"),
-                            String.valueOf(resultSet.getInt("Capacity"))
+                            String.valueOf(classID),
+                            title,
+                            schedule,
+                            String.valueOf(capacity),
+                            remainingText
                         };
 
                         if (count == temp.length)
@@ -126,6 +139,50 @@ public class QueryHelpers
             }
 
         return classes;
+    }
+
+    // Returns confirmed booking count for a class.
+    public static int getConfirmedBookingCount(int classID)
+    {
+        Connection connection       = null;
+        PreparedStatement pstat     = null;
+        ResultSet resultSet         = null;
+        int count                   = 0;
+
+        try
+            {
+                connection = Database.getConnection();
+                pstat = connection.prepareStatement(
+                    "SELECT COUNT(*) AS count FROM Booking " +
+                    "WHERE ClassID = ? AND DeletedFlag != 1 AND Status = 'Confirmed'"
+                );
+                pstat.setInt(1, classID);
+                resultSet = pstat.executeQuery();
+
+                if (resultSet.next())
+                    {
+                        count = resultSet.getInt("count");
+                    }
+            }
+        catch (SQLException sqlException)
+            {
+                sqlException.printStackTrace();
+            }
+        finally
+            {
+                try
+                    {
+                        if (resultSet  != null) resultSet.close();
+                        if (pstat      != null) pstat.close();
+                        if (connection != null) connection.close();
+                    }
+                catch (Exception exception)
+                    {
+                        exception.printStackTrace();
+                    }
+            }
+
+        return count;
     }
 
     // Returns all bookings joined with member and class data.

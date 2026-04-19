@@ -36,7 +36,7 @@ public class BookClass extends JFrame
         setLocationRelativeTo(null);
 
         // --- Table setup ---
-        String[] columns = { "Class ID", "Title", "Schedule", "Capacity" };
+        String[] columns = { "Class ID", "Title", "Schedule", "Capacity", "Remaining" };
         tableModel = new DefaultTableModel(columns, 0)
         {
             // Make table cells non-editable
@@ -56,7 +56,7 @@ public class BookClass extends JFrame
         JScrollPane scrollPane = new JScrollPane(classTable);
 
         // --- Load class data ---
-        // Each String[]: [ClassID, Title, Schedule, Capacity]
+        // Each String[]: [ClassID, Title, Schedule, Capacity, Remaining]
         String[][] classes = QueryHelpers.getAllClasses();
 
         if (classes.length == 0)
@@ -128,6 +128,18 @@ public class BookClass extends JFrame
             {
                 try
                 {
+                    int capacity = Integer.parseInt((String) tableModel.getValueAt(selectedRow, 3));
+                    int bookedCount = QueryHelpers.getConfirmedBookingCount(classID);
+
+                    if (bookedCount >= capacity)
+                    {
+                        JOptionPane.showMessageDialog(null,
+                            "This class is full. Please choose another class or try a different time.",
+                            "Class Full",
+                            JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
                     // Check if member already has a booking for this class
                     if (QueryHelpers.hasBookingForClass(memberID, classID))
                     {

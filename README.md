@@ -88,7 +88,7 @@ The database holds gym users, schedules, and bookings in SQLite.
 
 You can open the ER diagram file here:
 
-[UML-Diagrams/er_diagram.png](../UML-Diagrams/er_diagram.png)
+[UML-Diagrams/er_diagram.png](/UML-Diagrams/er_diagram.png)
 
 ### How it works
 

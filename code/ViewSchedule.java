@@ -1,3 +1,8 @@
+// Student Name :      Damon Kelly
+// Student Id Number : C00307057
+// Date :              14/04/2026
+// Purpose :           Trainer screen showing all classes they are running with confirmed booking counts.
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

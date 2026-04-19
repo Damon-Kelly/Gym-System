@@ -1,7 +1,7 @@
-// Student Name : BookClass.java Damon Kelly
-// Student Id Number : C00307057
-// Date :    05/03/2026
-// Purpose : BookClass.java    Inserts a new booking into the Booking table.
+// Student Name : 		Damon Kelly
+// Student Id Number : 	C00307057
+// Date :			    05/03/2026
+// Purpose : 		    Inserts a new booking into the Booking table.
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

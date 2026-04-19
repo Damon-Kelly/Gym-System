@@ -1,3 +1,8 @@
+// Student Name :      Damon Kelly
+// Student Id Number : C00307057
+// Date :              14/04/2026
+// Purpose :           Displays the active membership details for a member.
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

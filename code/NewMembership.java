@@ -1,3 +1,8 @@
+// Student Name :      Damon Kelly
+// Student Id Number : C00307057
+// Date :              14/04/2026
+// Purpose :           Form for creating a new membership for a member.
+
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;

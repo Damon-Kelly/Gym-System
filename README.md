@@ -1,6 +1,6 @@
 # Gym Management System
 
-A Java desktop app for handling gym members, memberships, trainers, classes, and bookings.
+A Java app for handling gym members, memberships, trainers, classes, and bookings.
 
 ## Overview
 
@@ -13,7 +13,7 @@ A Java desktop app for handling gym members, memberships, trainers, classes, and
 ## Prerequisites
 
 - Java Development Kit (JDK) 17 or higher
-- SQLite3 (usually comes pre-installed on most OS)
+- SQLite3
 
 ## Run from JAR
 

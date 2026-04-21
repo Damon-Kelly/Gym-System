@@ -9,37 +9,20 @@ import java.sql.SQLException;
 
 public class DeleteBooking
 {
-    public static void deleteBooking(int bookingID) 
+    public static void deleteBooking(int bookingID)
     {
-        Connection connection = null;
-        PreparedStatement pstat = null;
-        int i =0;
-        try 
-            {
-                // establish connection to database
-                connection = Database.getConnection();
-                // create Prepared Statement for inserting data into table
-                pstat = connection.prepareStatement("DELETE FROM Booking WHERE BookingID = ?");
-                pstat . setInt (1, bookingID);
-                // insert data into table
-                i = pstat .executeUpdate();
-                System.out. println ( i + " record successfully deleted from the table.");
-            }
-            catch(SQLException sqlException)
-                {
-                sqlException . printStackTrace ();
-                }
-            finally 
-                {
-                try 
-                    {
-                        pstat . close ();
-                        connection. close ();
-                    }
-                catch (Exception exception)
-                    {
-                        exception . printStackTrace ();
-                    }
-                }
-    } // end main
-} // end class
+        String sql = "UPDATE Booking SET DeletedFlag = 1, Status = 'Deleted' WHERE BookingID = ?";
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement pstat = connection.prepareStatement(sql)) {
+
+            pstat.setInt(1, bookingID);
+            int updated = pstat.executeUpdate();
+            System.out.println(updated + " booking(s) marked deleted.");
+
+        } 
+        catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+}

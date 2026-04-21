@@ -19,44 +19,44 @@ public class QueryHelpers
         String[] membership         = null;
 
         try
-            {
-                connection = Database.getConnection();
-                pstat = connection.prepareStatement(
-                    "SELECT PlanType, StartDate, EndDate, IsActive " +
-                    "FROM Membership " +
-                    "WHERE MemberID = ? AND IsActive = 1"
-                );
-                pstat.setInt(1, memberID);
-                resultSet = pstat.executeQuery();
+        {
+            connection = Database.getConnection();
+            pstat = connection.prepareStatement(
+                "SELECT PlanType, StartDate, EndDate, IsActive " +
+                "FROM Membership " +
+                "WHERE MemberID = ? AND IsActive = 1"
+            );
+            pstat.setInt(1, memberID);
+            resultSet = pstat.executeQuery();
 
-                if (resultSet.next())
-                    {
-                        membership = new String[]
-                        {
-                            resultSet.getString("PlanType"),
-                            resultSet.getString("StartDate"),
-                            resultSet.getString("EndDate"),
-                            String.valueOf(resultSet.getInt("IsActive"))
-                        };
-                    }
+            if (resultSet.next())
+            {
+                membership = new String[]
+                {
+                    resultSet.getString("PlanType"),
+                    resultSet.getString("StartDate"),
+                    resultSet.getString("EndDate"),
+                    String.valueOf(resultSet.getInt("IsActive"))
+                };
             }
+        }
         catch (SQLException sqlException)
-            {
-                sqlException.printStackTrace();
-            }
+        {
+            sqlException.printStackTrace();
+        }
         finally
+        {
+            try
             {
-                try
-                    {
-                        if (resultSet  != null) resultSet.close();
-                        if (pstat      != null) pstat.close();
-                        if (connection != null) connection.close();
-                    }
-                catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                if (resultSet  != null) resultSet.close();
+                if (pstat      != null) pstat.close();
+                if (connection != null) connection.close();
             }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
 
         return membership;
     }
@@ -71,72 +71,73 @@ public class QueryHelpers
         int count                   = 0;
 
         try
+        {
+            connection = Database.getConnection();
+            pstat = connection.prepareStatement(
+                "SELECT c.ClassID, c.Title, c.Schedule, c.Capacity, " +
+                "COUNT(b.BookingID) AS BookedCount " +
+                "FROM Class c " +
+                "LEFT JOIN Booking b ON c.ClassID = b.ClassID AND b.DeletedFlag != 1 AND b.Status = 'Confirmed' " +
+                "WHERE c.DeletedFlag != 1 " +
+                "GROUP BY c.ClassID, c.Title, c.Schedule, c.Capacity"
+            );
+            resultSet = pstat.executeQuery();
+
+            while (resultSet.next())
             {
-                connection = Database.getConnection();
-                pstat = connection.prepareStatement(
-                    "SELECT c.ClassID, c.Title, c.Schedule, c.Capacity, " +
-                    "COUNT(b.BookingID) AS BookedCount " +
-                    "FROM Class c " +
-                    "LEFT JOIN Booking b ON c.ClassID = b.ClassID AND b.DeletedFlag != 1 AND b.Status = 'Confirmed' " +
-                    "GROUP BY c.ClassID, c.Title, c.Schedule, c.Capacity"
-                );
-                resultSet = pstat.executeQuery();
+                int classID = resultSet.getInt("ClassID");
+                String title = resultSet.getString("Title");
+                String schedule = resultSet.getString("Schedule");
+                int capacity = resultSet.getInt("Capacity");
+                int booked = resultSet.getInt("BookedCount");
+                int remaining = Math.max(0, capacity - booked);
+                String remainingText = remaining == 0 ? "Full" : String.valueOf(remaining);
 
-                while (resultSet.next())
+                String[] row = new String[]
+                {
+                    String.valueOf(classID),
+                    title,
+                    schedule,
+                    String.valueOf(capacity),
+                    remainingText
+                };
+
+                if (count == temp.length)
+                {
+                    String[][] expanded = new String[temp.length * 2][];
+                    for (int i = 0; i < temp.length; i++)
                     {
-                        int classID = resultSet.getInt("ClassID");
-                        String title = resultSet.getString("Title");
-                        String schedule = resultSet.getString("Schedule");
-                        int capacity = resultSet.getInt("Capacity");
-                        int booked = resultSet.getInt("BookedCount");
-                        int remaining = Math.max(0, capacity - booked);
-                        String remainingText = remaining == 0 ? "Full" : String.valueOf(remaining);
-
-                        String[] row = new String[]
-                        {
-                            String.valueOf(classID),
-                            title,
-                            schedule,
-                            String.valueOf(capacity),
-                            remainingText
-                        };
-
-                        if (count == temp.length)
-                            {
-                                String[][] expanded = new String[temp.length * 2][];
-                                for (int i = 0; i < temp.length; i++)
-                                    {
-                                        expanded[i] = temp[i];
-                                    }
-                                temp = expanded;
-                            }
-
-                        temp[count++] = row;
+                        expanded[i] = temp[i];
                     }
+                    temp = expanded;
+                }
+
+                temp[count++] = row;
             }
+        }
         catch (SQLException sqlException)
-            {
-                sqlException.printStackTrace();
-            }
+        {
+            sqlException.printStackTrace();
+        }
         finally
+        {
+            try
             {
-                try
-                    {
-                        if (resultSet  != null) resultSet.close();
-                        if (pstat      != null) pstat.close();
-                        if (connection != null) connection.close();
-                    }
-                catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                if (resultSet  != null) resultSet.close();
+                if (pstat      != null) pstat.close();
+                if (connection != null) connection.close();
             }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
 
         String[][] classes = new String[count][];
         for (int i = 0; i < count; i++)
-            {
-                classes[i] = temp[i];
-            }
+        {
+            classes[i] = temp[i];
+        }
 
         return classes;
     }
@@ -150,37 +151,37 @@ public class QueryHelpers
         int count                   = 0;
 
         try
-            {
-                connection = Database.getConnection();
-                pstat = connection.prepareStatement(
-                    "SELECT COUNT(*) AS count FROM Booking " +
-                    "WHERE ClassID = ? AND DeletedFlag != 1 AND Status = 'Confirmed'"
-                );
-                pstat.setInt(1, classID);
-                resultSet = pstat.executeQuery();
+        {
+            connection = Database.getConnection();
+            pstat = connection.prepareStatement(
+                "SELECT COUNT(*) AS count FROM Booking " +
+                "WHERE ClassID = ? AND DeletedFlag != 1 AND Status = 'Confirmed'"
+            );
+            pstat.setInt(1, classID);
+            resultSet = pstat.executeQuery();
 
-                if (resultSet.next())
-                    {
-                        count = resultSet.getInt("count");
-                    }
+            if (resultSet.next())
+            {
+                count = resultSet.getInt("count");
             }
+        }
         catch (SQLException sqlException)
-            {
-                sqlException.printStackTrace();
-            }
+        {
+            sqlException.printStackTrace();
+        }
         finally
+        {
+            try
             {
-                try
-                    {
-                        if (resultSet  != null) resultSet.close();
-                        if (pstat      != null) pstat.close();
-                        if (connection != null) connection.close();
-                    }
-                catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                if (resultSet  != null) resultSet.close();
+                if (pstat      != null) pstat.close();
+                if (connection != null) connection.close();
             }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
 
         return count;
     }
@@ -195,66 +196,66 @@ public class QueryHelpers
         int count                   = 0;
 
         try
+        {
+            connection = Database.getConnection();
+            pstat = connection.prepareStatement(
+                "SELECT Member.Name, Class.Title, Class.Schedule, " +
+                "Booking.BookingDate, Booking.Status " +
+                "FROM Booking " +
+                "INNER JOIN Member ON Booking.MemberID = Member.MemberID " +
+                "INNER JOIN Class  ON Booking.ClassID  = Class.ClassID " +
+                "WHERE Booking.DeletedFlag != 1 " +
+                "ORDER BY Booking.BookingDate DESC"
+            );
+            resultSet = pstat.executeQuery();
+
+            while (resultSet.next())
             {
-                connection = Database.getConnection();
-                pstat = connection.prepareStatement(
-                    "SELECT Member.Name, Class.Title, Class.Schedule, " +
-                    "Booking.BookingDate, Booking.Status " +
-                    "FROM Booking " +
-                    "INNER JOIN Member ON Booking.MemberID = Member.MemberID " +
-                    "INNER JOIN Class  ON Booking.ClassID  = Class.ClassID " +
-                    "WHERE Booking.DeletedFlag != 1 " +
-                    "ORDER BY Booking.BookingDate DESC"
-                );
-                resultSet = pstat.executeQuery();
+                String[] row = new String[]
+                {
+                    resultSet.getString("Name"),
+                    resultSet.getString("Title"),
+                    resultSet.getString("Schedule"),
+                    resultSet.getString("BookingDate"),
+                    resultSet.getString("Status")
+                };
 
-                while (resultSet.next())
+                if (count == temp.length)
+                {
+                    String[][] expanded = new String[temp.length * 2][];
+                    for (int i = 0; i < temp.length; i++)
                     {
-                        String[] row = new String[]
-                        {
-                            resultSet.getString("Name"),
-                            resultSet.getString("Title"),
-                            resultSet.getString("Schedule"),
-                            resultSet.getString("BookingDate"),
-                            resultSet.getString("Status")
-                        };
-
-                        if (count == temp.length)
-                            {
-                                String[][] expanded = new String[temp.length * 2][];
-                                for (int i = 0; i < temp.length; i++)
-                                    {
-                                        expanded[i] = temp[i];
-                                    }
-                                temp = expanded;
-                            }
-
-                        temp[count++] = row;
+                        expanded[i] = temp[i];
                     }
+                    temp = expanded;
+                }
+
+                temp[count++] = row;
             }
+        }
         catch (SQLException sqlException)
-            {
-                sqlException.printStackTrace();
-            }
+        {
+            sqlException.printStackTrace();
+        }
         finally
+        {
+            try
             {
-                try
-                    {
-                        if (resultSet  != null) resultSet.close();
-                        if (pstat      != null) pstat.close();
-                        if (connection != null) connection.close();
-                    }
-                catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                if (resultSet  != null) resultSet.close();
+                if (pstat      != null) pstat.close();
+                if (connection != null) connection.close();
             }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
 
         String[][] bookings = new String[count][];
         for (int i = 0; i < count; i++)
-            {
-                bookings[i] = temp[i];
-            }
+        {
+            bookings[i] = temp[i];
+        }
 
         return bookings;
     }
@@ -269,66 +270,66 @@ public class QueryHelpers
         int count                   = 0;
 
         try
+        {
+            connection = Database.getConnection();
+            pstat = connection.prepareStatement(
+                "SELECT Booking.BookingID, Class.Title, Class.Schedule, " +
+                "Booking.BookingDate, Booking.Status " +
+                "FROM Booking " +
+                "INNER JOIN Class ON Booking.ClassID = Class.ClassID " +
+                "WHERE Booking.MemberID = ? AND Booking.DeletedFlag != 1 " +
+                "ORDER BY Booking.BookingDate DESC"
+            );
+            pstat.setInt(1, memberID);
+            resultSet = pstat.executeQuery();
+
+            while (resultSet.next())
             {
-                connection = Database.getConnection();
-                pstat = connection.prepareStatement(
-                    "SELECT Booking.BookingID, Class.Title, Class.Schedule, " +
-                    "Booking.BookingDate, Booking.Status " +
-                    "FROM Booking " +
-                    "INNER JOIN Class ON Booking.ClassID = Class.ClassID " +
-                    "WHERE Booking.MemberID = ? AND Booking.DeletedFlag != 1 " +
-                    "ORDER BY Booking.BookingDate DESC"
-                );
-                pstat.setInt(1, memberID);
-                resultSet = pstat.executeQuery();
+                String[] row = new String[]
+                {
+                    String.valueOf(resultSet.getInt("BookingID")),
+                    resultSet.getString("Title"),
+                    resultSet.getString("Schedule"),
+                    resultSet.getString("BookingDate"),
+                    resultSet.getString("Status")
+                };
 
-                while (resultSet.next())
+                if (count == temp.length)
+                {
+                    String[][] expanded = new String[temp.length * 2][];
+                    for (int i = 0; i < temp.length; i++)
                     {
-                        String[] row = new String[]
-                        {
-                            String.valueOf(resultSet.getInt("BookingID")),
-                            resultSet.getString("Title"),
-                            resultSet.getString("Schedule"),
-                            resultSet.getString("BookingDate"),
-                            resultSet.getString("Status")
-                        };
-
-                        if (count == temp.length)
-                            {
-                                String[][] expanded = new String[temp.length * 2][];
-                                for (int i = 0; i < temp.length; i++)
-                                    {
-                                        expanded[i] = temp[i];
-                                    }
-                                temp = expanded;
-                            }
-
-                        temp[count++] = row;
+                        expanded[i] = temp[i];
                     }
+                    temp = expanded;
+                }
+
+                temp[count++] = row;
             }
+        }
         catch (SQLException sqlException)
-            {
-                sqlException.printStackTrace();
-            }
+        {
+            sqlException.printStackTrace();
+        }
         finally
+        {
+            try
             {
-                try
-                    {
-                        if (resultSet  != null) resultSet.close();
-                        if (pstat      != null) pstat.close();
-                        if (connection != null) connection.close();
-                    }
-                catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                if (resultSet  != null) resultSet.close();
+                if (pstat      != null) pstat.close();
+                if (connection != null) connection.close();
             }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
 
         String[][] bookings = new String[count][];
         for (int i = 0; i < count; i++)
-            {
-                bookings[i] = temp[i];
-            }
+        {
+            bookings[i] = temp[i];
+        }
 
         return bookings;
     }
@@ -343,64 +344,64 @@ public class QueryHelpers
         int count                   = 0;
 
         try
+        {
+            connection = Database.getConnection();
+            pstat = connection.prepareStatement(
+                "SELECT c.ClassID, c.Title, c.Schedule, COUNT(b.BookingID) as ConfirmedCount " +
+                "FROM Class c " +
+                "LEFT JOIN Booking b ON c.ClassID = b.ClassID AND b.Status = 'Confirmed' AND b.DeletedFlag != 1 " +
+                "WHERE c.TrainerID = ? AND c.DeletedFlag != 1 " +
+                "GROUP BY c.ClassID, c.Title, c.Schedule, c.TrainerID"
+            );
+            pstat.setInt(1, trainerID);
+            resultSet = pstat.executeQuery();
+
+            while (resultSet.next())
             {
-                connection = Database.getConnection();
-                pstat = connection.prepareStatement(
-                    "SELECT c.ClassID, c.Title, c.Schedule, COUNT(b.BookingID) as ConfirmedCount " +
-                    "FROM Class c " +
-                    "LEFT JOIN Booking b ON c.ClassID = b.ClassID AND b.Status = 'Confirmed' " +
-                    "WHERE c.TrainerID = ? " +
-                    "GROUP BY c.ClassID, c.Title, c.Schedule, c.TrainerID"
-                );
-                pstat.setInt(1, trainerID);
-                resultSet = pstat.executeQuery();
+                String[] row = new String[]
+                {
+                    String.valueOf(resultSet.getInt("ClassID")),
+                    resultSet.getString("Title"),
+                    resultSet.getString("Schedule"),
+                    String.valueOf(resultSet.getInt("ConfirmedCount"))
+                };
 
-                while (resultSet.next())
+                if (count == temp.length)
+                {
+                    String[][] expanded = new String[temp.length * 2][];
+                    for (int i = 0; i < temp.length; i++)
                     {
-                        String[] row = new String[]
-                        {
-                            String.valueOf(resultSet.getInt("ClassID")),
-                            resultSet.getString("Title"),
-                            resultSet.getString("Schedule"),
-                            String.valueOf(resultSet.getInt("ConfirmedCount"))
-                        };
-
-                        if (count == temp.length)
-                            {
-                                String[][] expanded = new String[temp.length * 2][];
-                                for (int i = 0; i < temp.length; i++)
-                                    {
-                                        expanded[i] = temp[i];
-                                    }
-                                temp = expanded;
-                            }
-
-                        temp[count++] = row;
+                        expanded[i] = temp[i];
                     }
+                    temp = expanded;
+                }
+
+                temp[count++] = row;
             }
+        }
         catch (SQLException sqlException)
-            {
-                sqlException.printStackTrace();
-            }
+        {
+            sqlException.printStackTrace();
+        }
         finally
+        {
+            try
             {
-                try
-                    {
-                        if (resultSet  != null) resultSet.close();
-                        if (pstat      != null) pstat.close();
-                        if (connection != null) connection.close();
-                    }
-                catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                if (resultSet  != null) resultSet.close();
+                if (pstat      != null) pstat.close();
+                if (connection != null) connection.close();
             }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
 
         String[][] classes = new String[count][];
         for (int i = 0; i < count; i++)
-            {
-                classes[i] = temp[i];
-            }
+        {
+            classes[i] = temp[i];
+        }
 
         return classes;
     }
@@ -414,38 +415,38 @@ public class QueryHelpers
         boolean hasBooking          = false;
 
         try
-            {
-                connection = Database.getConnection();
-                pstat = connection.prepareStatement(
-                    "SELECT COUNT(*) as count FROM Booking " +
-                    "WHERE MemberID = ? AND ClassID = ? AND DeletedFlag != 1"
-                );
-                pstat.setInt(1, memberID);
-                pstat.setInt(2, classID);
-                resultSet = pstat.executeQuery();
+        {
+            connection = Database.getConnection();
+            pstat = connection.prepareStatement(
+                "SELECT COUNT(*) as count FROM Booking " +
+                "WHERE MemberID = ? AND ClassID = ? AND DeletedFlag != 1"
+            );
+            pstat.setInt(1, memberID);
+            pstat.setInt(2, classID);
+            resultSet = pstat.executeQuery();
 
-                if (resultSet.next())
-                    {
-                        hasBooking = resultSet.getInt("count") > 0;
-                    }
+            if (resultSet.next())
+            {
+                hasBooking = resultSet.getInt("count") > 0;
             }
+        }
         catch (SQLException sqlException)
-            {
-                sqlException.printStackTrace();
-            }
+        {
+            sqlException.printStackTrace();
+        }
         finally
+        {
+            try
             {
-                try
-                    {
-                        if (resultSet  != null) resultSet.close();
-                        if (pstat      != null) pstat.close();
-                        if (connection != null) connection.close();
-                    }
-                catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                if (resultSet  != null) resultSet.close();
+                if (pstat      != null) pstat.close();
+                if (connection != null) connection.close();
             }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
 
         return hasBooking;
     }

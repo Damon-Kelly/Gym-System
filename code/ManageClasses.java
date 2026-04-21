@@ -3,10 +3,21 @@
 // Date :              14/04/2026
 // Purpose :           GUI for trainer to manage gym classes with full CRUD operations.
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 public class ManageClasses extends JFrame
 {
@@ -28,7 +39,6 @@ public class ManageClasses extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // --- Table setup ---
         String[] columns = { "Class ID", "Title", "Schedule", "Capacity" };
         tableModel = new DefaultTableModel(columns, 0)
         {
@@ -41,10 +51,8 @@ public class ManageClasses extends JFrame
 
         JScrollPane scrollPane = new JScrollPane(classTable);
 
-        // --- Load data ---
         loadClassData();
 
-        // --- Button panel ---
         JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 10, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -58,44 +66,29 @@ public class ManageClasses extends JFrame
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
 
-        // --- Layout ---
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // --- Event Listeners ---
         addButton.addActionListener(new AddHandler());
         editButton.addActionListener(new EditHandler());
         deleteButton.addActionListener(new DeleteHandler());
         backButton.addActionListener(new BackHandler());
 
         setVisible(true);
+    }
 
-    } // end constructor
-
-
-    /**
-     * Clears and reloads the class table from the database.
-     * Called on load and after any CRUD operation.
-     */
     private void loadClassData()
     {
         tableModel.setRowCount(0);
 
-        // Each String[]: [ClassID, Title, Schedule, Capacity]
         String[][] classes = QueryHelpers.getAllClasses();
 
         for (String[] row : classes)
         {
             tableModel.addRow(row);
         }
+    }
 
-    } // end loadClassData
-
-
-    /**
-     * Validates the schedule string (format: YYYY-MM-DD HH:MM).
-     * Throws ValidationException if the date or time part is invalid.
-     */
     private void validateSchedule(String schedule) throws ValidationException
     {
         if (schedule == null || schedule.length() != 16 || schedule.charAt(10) != ' ')
@@ -106,8 +99,6 @@ public class ManageClasses extends JFrame
         Validator.validateClassTime(schedule.substring(11));
     }
 
-
-    // --- Add Handler: opens a dialog to create a new class ---
     class AddHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -117,9 +108,9 @@ public class ManageClasses extends JFrame
             JTextField capacityField = new JTextField();
 
             Object[] fields = {
-                "Title:",              titleField,
+                "Title:", titleField,
                 "Schedule (YYYY-MM-DD HH:MM):", scheduleField,
-                "Capacity:",           capacityField
+                "Capacity:", capacityField
             };
 
             int result = JOptionPane.showConfirmDialog(null,
@@ -135,8 +126,7 @@ public class ManageClasses extends JFrame
                     String schedule = scheduleField.getText().trim();
                     String capacity = capacityField.getText().trim();
 
-                    // Fixed: validate all fields including schedule format and capacity range
-                    Validator.validateNotEmpty(title,    "Title");
+                    Validator.validateNotEmpty(title, "Title");
                     Validator.validateNotEmpty(schedule, "Schedule");
                     validateSchedule(schedule);
                     Validator.validateNotEmpty(capacity, "Capacity");
@@ -144,7 +134,7 @@ public class ManageClasses extends JFrame
                     int capacityInt = Integer.parseInt(capacity);
                     Validator.validateClassCapacity(capacityInt);
 
-                    InsertClass.insertClass(title, schedule, capacityInt);
+                    InsertClass.insertClass(title, schedule, capacityInt, trainerID);
 
                     JOptionPane.showMessageDialog(null, "Class added successfully!");
 
@@ -172,13 +162,9 @@ public class ManageClasses extends JFrame
                         JOptionPane.ERROR_MESSAGE);
                 }
             }
+        }
+    }
 
-        } // end actionPerformed
-
-    } // end AddHandler
-
-
-    // --- Edit Handler: pre-fills dialog with selected class data ---
     class EditHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -204,9 +190,9 @@ public class ManageClasses extends JFrame
             JTextField capacityField = new JTextField(capacity);
 
             Object[] fields = {
-                "Title:",              titleField,
+                "Title:", titleField,
                 "Schedule (YYYY-MM-DD HH:MM):", scheduleField,
-                "Capacity:",           capacityField
+                "Capacity:", capacityField
             };
 
             int result = JOptionPane.showConfirmDialog(null,
@@ -222,8 +208,7 @@ public class ManageClasses extends JFrame
                     String newSchedule = scheduleField.getText().trim();
                     String newCapacity = capacityField.getText().trim();
 
-                    // Fixed: validate all fields including schedule format and capacity range
-                    Validator.validateNotEmpty(newTitle,    "Title");
+                    Validator.validateNotEmpty(newTitle, "Title");
                     Validator.validateNotEmpty(newSchedule, "Schedule");
                     validateSchedule(newSchedule);
                     Validator.validateNotEmpty(newCapacity, "Capacity");
@@ -259,13 +244,9 @@ public class ManageClasses extends JFrame
                         JOptionPane.ERROR_MESSAGE);
                 }
             }
+        }
+    }
 
-        } // end actionPerformed
-
-    } // end EditHandler
-
-
-    // --- Delete Handler: soft deletes selected class ---
     class DeleteHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -307,13 +288,9 @@ public class ManageClasses extends JFrame
                         JOptionPane.ERROR_MESSAGE);
                 }
             }
+        }
+    }
 
-        } // end actionPerformed
-
-    } // end DeleteHandler
-
-
-    // --- Back Handler ---
     class BackHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -321,7 +298,6 @@ public class ManageClasses extends JFrame
             dispose();
             new TrainerDashboard(trainerID);
         }
+    }
+}
 
-    } // end BackHandler
-
-} // end class

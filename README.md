@@ -13,19 +13,7 @@ A Java app for handling gym members, memberships, trainers, classes, and booking
 ## Prerequisites
 
 - Java Development Kit (JDK) 17 or higher
-- SQLite3
-
-## Run from JAR
-
-The compiled JAR is already in the repo. Just run it with the JDBC driver in the classpath:
-
-```bash
-# For macOS/Linux
-java -cp "sqlite/sqlite-jdbc-3.51.1.0.jar:GymSystem.jar" GymGui
-
-# For Windows
-java -cp "sqlite/sqlite-jdbc-3.51.1.0.jar;GymSystem.jar" GymGui
-```
+- SQLite
 
 ## Required files
 

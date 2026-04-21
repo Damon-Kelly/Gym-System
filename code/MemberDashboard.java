@@ -73,10 +73,10 @@ public class MemberDashboard extends JFrame
         buttonPanel.setMaximumSize(new Dimension(300, 250));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        myMembershipButton = createStyledButton("My Membership", new Color(100, 150, 255));
-        bookClassButton = createStyledButton("Book a Class", new Color(100, 200, 100));
-        myBookingsButton = createStyledButton("View My Bookings", new Color(255, 180, 100));
-        logoutButton = createStyledButton("Logout", new Color(230, 100, 100));
+        myMembershipButton = createStyledButton("My Membership");
+        bookClassButton = createStyledButton("Book a Class");
+        myBookingsButton = createStyledButton("View My Bookings");
+        logoutButton = createStyledButton("Logout");
 
         buttonPanel.add(myMembershipButton);
         buttonPanel.add(bookClassButton);
@@ -96,28 +96,13 @@ public class MemberDashboard extends JFrame
         setVisible(true);
     }
 
-    private JButton createStyledButton(String text, Color bgColor)
+    private JButton createStyledButton(String text)
     {
         JButton button = new JButton(text);
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setOpaque(true);
         button.setPreferredSize(new Dimension(300, 50));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Add hover effect
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.darker());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-        
         return button;
     }
 
